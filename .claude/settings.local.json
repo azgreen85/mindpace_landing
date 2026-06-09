@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p \"/Users/azikiweagreen/Desktop/mindpace lannding/.claude\")",
+      "mcp__Claude_Preview__preview_start",
+      "Bash(git -C /Users/azikiweagreen/Desktop/mindpace_landing status)"
+    ]
+  }
+}
