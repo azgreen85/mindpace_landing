@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MindPace — Breathwork tracking for your nervous system</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0d0f14;
+  --bg2:      #141720;
+  --bg3:      #1c2030;
+  --bg4:      #232840;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --text:     #e8eaf0;
+  --text2:    #8890a8;
+  --text3:    #505570;
+  --accent:   #7c9fff;
+  --accent2:  #4a7aff;
+  --pacer:    #64d9a8;
+  --amber:    #ffc664;
+  --stop:     #ff7c7c;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 2rem;
+  background: rgba(13,15,20,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.35rem;
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+.nav-cta {
+  padding: 0.5rem 1.25rem;
+  background: var(--pacer);
+  border: none; border-radius: 7px;
+  color: #0a1f18;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 7rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Ambient glow behind pacer */
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 30%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  background: radial-gradient(ellipse at center, rgba(100,217,168,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  display: flex;
+  align-items: center;
+  gap: 5rem;
+  max-width: 960px;
+  width: 100%;
+}
+
+.hero-copy { flex: 1; }
+
+.hero-eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  color: var(--pacer);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  padding: 0.3rem 0.75rem;
+  background: rgba(100,217,168,0.1);
+  border: 1px solid rgba(100,217,168,0.2);
+  border-radius: 20px;
+}
+
+.hero-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.hero-headline em {
+  font-style: italic;
+  color: var(--pacer);
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text2);
+  line-height: 1.65;
+  max-width: 440px;
+  margin-bottom: 2.25rem;
+  font-weight: 400;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-hero {
+  padding: 0.85rem 2rem;
+  background: var(--pacer);
+  border: none; border-radius: 9px;
+  color: #0a1f18;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.975rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-hero:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.btn-ghost {
+  font-size: 0.875rem;
+  color: var(--text2);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.2s;
+}
+.btn-ghost:hover { color: var(--text); }
+.btn-ghost svg { width: 16px; height: 16px; }
+
+/* ── LIVE PACER WIDGET ── */
+.hero-widget {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+}
+
+.pacer-bar-wrap {
+  position: relative;
+  width: 90px; height: 240px;
+  background: var(--bg3);
+  border-radius: 18px;
+  border: 1px solid var(--border2);
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(100,217,168,0.1), 0 0 1px rgba(100,217,168,0.3);
+}
+
+@keyframes pacer-breathe {
+  0%   { height: 4%; }
+  45%  { height: 96%; }
+  55%  { height: 96%; }
+  90%  { height: 4%; }
+  100% { height: 4%; }
+}
+
+.pacer-fill {
+  position: absolute; bottom: 0; left: 0; width: 100%;
+  background: linear-gradient(to top, #0d6e52, var(--pacer));
+  border-radius: 0 0 16px 16px;
+  animation: pacer-breathe 9s ease-in-out infinite;
+}
+
+.pacer-overlay {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  pointer-events: none;
+}
+
+.pacer-phase-lbl {
+  font-family: 'DM Serif Display', serif;
+  font-size: 0.9rem;
+  color: var(--text);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.7);
+}
+
+.pacer-count-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 2.25rem;
+  color: var(--pacer);
+  font-weight: 500;
+  line-height: 1;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.7);
+}
+
+.pacer-unit-lbl {
+  font-size: 0.6rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 3px;
+}
+
+.widget-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  color: var(--text3);
+}
+.widget-meta span { color: var(--pacer); }
+
+/* Phase pills */
+.phase-pills {
+  display: flex; gap: 6px;
+}
+.phase-pill {
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  background: var(--bg3);
+  color: var(--text3);
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+.phase-pill.active {
+  background: rgba(100,217,168,0.15);
+  color: var(--pacer);
+  border-color: rgba(100,217,168,0.3);
+}
+
+/* ── DIVIDER ── */
+.section-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border2), transparent);
+  margin: 0 2rem;
+}
+
+/* ── WHY ── */
+.why {
+  padding: 6rem 2rem;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 0.72rem;
+  color: var(--pacer);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 0.85rem;
+}
+
+.section-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  margin-bottom: 3.5rem;
+  max-width: 540px;
+}
+
+.why-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.why-card {
+  background: var(--bg2);
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: background 0.2s;
+}
+.why-card:hover { background: var(--bg3); }
+
+.why-icon {
+  width: 36px; height: 36px;
+  background: rgba(100,217,168,0.1);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 0.25rem;
+}
+.why-icon svg { width: 18px; height: 18px; }
+
+.why-card-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.15rem;
+  color: var(--text);
+  line-height: 1.2;
+}
+
+.why-card-body {
+  font-size: 0.9rem;
+  color: var(--text2);
+  line-height: 1.6;
+  font-weight: 400;
+}
+
+/* ── GRAPH SECTION ── */
+.graph-section {
+  padding: 5rem 2rem 6rem;
+  max-width: 960px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.graph-copy { flex: 1; min-width: 260px; }
+
+.graph-copy .section-label { margin-bottom: 0.85rem; }
+.graph-copy .section-headline { margin-bottom: 1.25rem; font-size: clamp(1.6rem, 3vw, 2.1rem); }
+
+.graph-desc {
+  font-size: 0.925rem;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+}
+
+.graph-visual {
+  flex: 1;
+  min-width: 280px;
+}
+
+/* Mini contrib graph */
+.contrib-preview {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  padding: 1.5rem 1.35rem;
+}
+
+.contrib-preview-title {
+  font-size: 0.7rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1rem;
+}
+
+.contrib-grid {
+  display: flex;
+  gap: 3px;
+}
+.contrib-col {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.contrib-cell {
+  width: 11px; height: 11px;
+  border-radius: 2px;
+}
+.contrib-legend {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 0.75rem;
+  font-size: 0.7rem;
+  color: var(--text3);
+}
+.legend-cell { width: 9px; height: 9px; border-radius: 1px; }
+
+.graph-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.75rem;
+}
+.graph-stat-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 1.6rem;
+  color: var(--pacer);
+  font-weight: 500;
+  line-height: 1;
+}
+.graph-stat-label {
+  font-size: 0.75rem;
+  color: var(--text3);
+  margin-top: 0.25rem;
+}
+
+/* ── WHO ── */
+.who {
+  padding: 5rem 2rem;
+  text-align: center;
+  background: var(--bg2);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.who-inner {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.who .section-label { text-align: center; }
+
+.who-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.75rem, 3.5vw, 2.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+}
+
+.who-sub {
+  font-size: 1rem;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 3rem;
+}
+
+.who-tags {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.who-tag {
+  padding: 0.45rem 1rem;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+
+/* ── CTA SECTION ── */
+.cta-section {
+  padding: 7rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px; height: 400px;
+  background: radial-gradient(ellipse at center, rgba(100,217,168,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.cta-inner { max-width: 580px; margin: 0 auto; }
+
+.cta-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.cta-sub {
+  font-size: 1rem;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 2.5rem;
+}
+
+/* ── SIGNUP FORM ── */
+.signup-row {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.signup-input {
+  padding: 0.8rem 1.1rem;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  outline: none;
+  width: 240px;
+  transition: border-color 0.2s;
+}
+.signup-input:focus { border-color: var(--pacer); }
+.signup-input::placeholder { color: var(--text3); }
+
+.btn-signup {
+  padding: 0.8rem 1.75rem;
+  background: var(--pacer);
+  border: none; border-radius: 8px;
+  color: #0a1f18;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+.btn-signup:hover { opacity: 0.88; transform: translateY(-1px); }
+
+.cta-fine {
+  font-size: 0.78rem;
+  color: var(--text3);
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.footer-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: var(--text2);
+}
+
+.footer-note {
+  font-size: 0.78rem;
+  color: var(--text3);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .hero-inner { flex-direction: column; align-items: flex-start; gap: 3rem; }
+  .hero-widget { align-self: center; }
+  .graph-section { flex-direction: column; }
+  footer { flex-direction: column; gap: 0.5rem; }
+  .graph-stats { gap: 1.5rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pacer-fill { animation: none; height: 50%; }
+}
+
+/* ── SUCCESS STATE ── */
+.success-msg {
+  display: none;
+  font-size: 0.9rem;
+  color: var(--pacer);
+  padding: 0.6rem 1rem;
+  background: rgba(100,217,168,0.1);
+  border: 1px solid rgba(100,217,168,0.2);
+  border-radius: 7px;
+  margin-top: 0.75rem;
+}
+.success-msg.visible { display: inline-block; }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">MindPace</div>
+  <div style="display:flex;align-items:center;gap:1.5rem;">
+    <a href="mindpace_founder.html" style="font-size:0.875rem;color:var(--text2);text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text2)'">Our story</a>
+    <a class="nav-cta" href="https://azgreen85.github.io/mindpace/" target="_blank">Get early access</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="hero-eyebrow">Breath tracking, reimagined</div>
+      <h1 class="hero-headline">
+        You don't need<br>
+        discipline.<br>
+        You need <em>visibility.</em>
+      </h1>
+      <p class="hero-sub">
+        MindPace tracks your breathwork the way GitHub tracks code —
+        one small session at a time, building a record you can actually see.
+        No streaks. No pressure. Just progress.
+      </p>
+      <div class="hero-actions">
+        <a class="btn-hero" href="https://azgreen85.github.io/mindpace/" target="_blank">Start for free</a>
+        <a class="btn-ghost" href="#why">
+          <svg viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          How it works
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-widget">
+      <div class="pacer-bar-wrap">
+        <div class="pacer-fill" id="pacer-fill"></div>
+        <div class="pacer-overlay">
+          <div class="pacer-phase-lbl" id="phase-lbl">Inhale</div>
+          <div class="pacer-count-lbl" id="count-lbl">4</div>
+          <div class="pacer-unit-lbl">seconds</div>
+        </div>
+      </div>
+      <div class="widget-meta"><span id="bpm-lbl">6.7</span> breaths / min</div>
+      <div class="phase-pills">
+        <div class="phase-pill active" id="pill-0">Inhale</div>
+        <div class="phase-pill" id="pill-1">Hold</div>
+        <div class="phase-pill active-exhale" id="pill-2">Exhale</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── WHY ── -->
+<section class="why" id="why">
+  <div class="section-label">Why it works</div>
+  <h2 class="section-headline">Built for people who've tried and quit before.</h2>
+
+  <div class="why-cards">
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 2v7l4 2" stroke="#64d9a8" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="9" cy="9" r="7" stroke="#64d9a8" stroke-width="1.5"/>
+        </svg>
+      </div>
+      <div class="why-card-title">Five minutes counts</div>
+      <div class="why-card-body">
+        Breathwork works in small doses. Even a single two-minute session activates your nervous system's calm response. MindPace treats every session — however short — as real progress.
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="14" height="14" rx="2" stroke="#64d9a8" stroke-width="1.5"/>
+          <path d="M5 10h2v3H5zM8 7h2v6H8zM11 5h2v8h-2z" fill="#64d9a8"/>
+        </svg>
+      </div>
+      <div class="why-card-title">Progress, not a streak</div>
+      <div class="why-card-body">
+        Streaks punish you for missing a day. The MindPace contribution graph just shows your cumulative dose — so a week with two good sessions looks like what it is: a week with two good sessions.
+      </div>
+    </div>
+
+    <div class="why-card">
+      <div class="why-icon">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M9 15s-6-4.5-6-8a6 6 0 0 1 12 0c0 3.5-6 8-6 8z" stroke="#64d9a8" stroke-width="1.5"/>
+          <circle cx="9" cy="7" r="1.5" fill="#64d9a8"/>
+        </svg>
+      </div>
+      <div class="why-card-title">Your pace, literally</div>
+      <div class="why-card-body">
+        The breath pacer guides your inhale and exhale at whatever rhythm works for you. No guided audio, no instructor — just a rising bar that rises when you breathe in, and falls when you breathe out.
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- ── GRAPH SECTION ── -->
+<section class="graph-section">
+  <div class="graph-copy">
+    <div class="section-label">Your dose over time</div>
+    <h2 class="section-headline">See your practice the way you see your fitness.</h2>
+    <p class="graph-desc">
+      Like a fitness tracker for your nervous system — the contribution graph turns invisible effort into something you can actually look at. Miss a few days? The graph doesn't shame you. It just waits for you to show up again.
+    </p>
+    <div class="graph-stats">
+      <div>
+        <div class="graph-stat-val">2 min</div>
+        <div class="graph-stat-label">minimum session</div>
+      </div>
+      <div>
+        <div class="graph-stat-val" style="color:var(--amber)">18 wks</div>
+        <div class="graph-stat-label">of history tracked</div>
+      </div>
+      <div>
+        <div class="graph-stat-val" style="color:var(--accent)">free</div>
+        <div class="graph-stat-label">to get started</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="graph-visual">
+    <div class="contrib-preview">
+      <div class="contrib-preview-title">Your activity — last 14 weeks</div>
+      <div class="contrib-grid" id="demo-grid"></div>
+      <div class="contrib-legend">
+        Less
+        <div class="legend-cell" style="background:var(--bg3)"></div>
+        <div class="legend-cell" style="background:rgba(100,217,168,0.2)"></div>
+        <div class="legend-cell" style="background:rgba(100,217,168,0.4)"></div>
+        <div class="legend-cell" style="background:rgba(100,217,168,0.65)"></div>
+        <div class="legend-cell" style="background:var(--pacer)"></div>
+        More
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHO ── -->
+<section class="who">
+  <div class="who-inner">
+    <div class="section-label">Who it's for</div>
+    <h2 class="who-headline">Made for people for whom discipline feels hard.</h2>
+    <p class="who-sub">
+      MindPace was built specifically for people managing anxiety, depression, or ADHD — conditions where showing up inconsistently is the reality, not a personal failing. The app is designed around that truth, not against it.
+    </p>
+    <div class="who-tags">
+      <div class="who-tag">Anxiety &amp; panic</div>
+      <div class="who-tag">Depression</div>
+      <div class="who-tag">ADHD</div>
+      <div class="who-tag">Stress</div>
+      <div class="who-tag">Beginners</div>
+      <div class="who-tag">Anyone who's quit before</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section class="cta-section" id="signup">
+  <div class="cta-inner">
+    <h2 class="cta-headline">Start your first<br>session today.</h2>
+    <p class="cta-sub">
+      Free to use. No downloads. Just open the app and press Start.
+    </p>
+    <a class="btn-hero" href="https://azgreen85.github.io/mindpace/" target="_blank">Try MindPace free</a>
+    <div class="cta-fine" style="margin-top:1rem;">No downloads. No pressure. Free to get started.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">MindPace</div>
+  <div class="footer-note">Breathwork tracking for your nervous system · 2026</div>
+</footer>
+
+<script>
+// ── PACER ANIMATION COUNTER ──
+const INHALE = 4.5, HOLD = 0, EXHALE = 4.5, HOLD2 = 0;
+const CYCLE = INHALE + HOLD + EXHALE + HOLD2;
+const PHASES = ['Inhale','Hold','Exhale','Hold'];
+const DURATIONS = [INHALE, HOLD, EXHALE, HOLD2];
+
+let phaseIdx = 0, phaseTime = 0, totalElapsed = 0;
+const phaseLbl = document.getElementById('phase-lbl');
+const countLbl = document.getElementById('count-lbl');
+
+function updatePacer() {
+  const activePhases = DURATIONS.map((d,i) => d > 0 ? i : -1).filter(i => i >= 0);
+  const dur = DURATIONS[phaseIdx];
+  const remaining = Math.max(0, Math.ceil(dur - phaseTime));
+
+  if (phaseLbl) phaseLbl.textContent = PHASES[phaseIdx];
+  if (countLbl) countLbl.textContent = remaining;
+
+  // Pills
+  ['pill-0','pill-1','pill-2'].forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const indices = [0, 1, 2]; // inhale, hold, exhale
+    el.className = 'phase-pill' + (indices[i] === phaseIdx ? ' active' : '');
+  });
+
+  phaseTime += 0.1;
+  if (phaseTime >= dur) {
+    phaseTime = 0;
+    phaseIdx = (phaseIdx + 1) % 4;
+    // skip zero-duration phases
+    let guard = 0;
+    while (DURATIONS[phaseIdx] === 0 && guard < 4) {
+      phaseIdx = (phaseIdx + 1) % 4;
+      guard++;
+    }
+  }
+}
+
+setInterval(updatePacer, 100);
+
+// ── DEMO CONTRIBUTION GRID ──
+function buildDemoGrid() {
+  const grid = document.getElementById('demo-grid');
+  if (!grid) return;
+  const weeks = 14;
+
+  // Realistic semi-random pattern — mostly sporadic with some active weeks
+  const seed = [
+    0,0,0,0,180,0,240,
+    0,300,0,180,0,0,0,
+    120,0,0,240,180,0,0,
+    0,0,300,0,0,420,0,
+    0,180,120,0,0,360,0,
+    240,0,0,0,300,0,180,
+    0,0,420,300,0,240,600,
+    360,0,0,0,480,300,0,
+    0,240,180,0,0,0,420,
+    600,0,0,300,0,480,0,
+    0,360,0,0,180,240,0,
+    0,0,480,360,300,0,600,
+    240,0,0,0,360,180,300,
+    0,600,480,0,300,0,0,
+  ];
+
+  function cellColor(secs) {
+    if (secs === 0) return 'var(--bg3)';
+    if (secs < 120) return 'rgba(100,217,168,0.2)';
+    if (secs < 300) return 'rgba(100,217,168,0.4)';
+    if (secs < 480) return 'rgba(100,217,168,0.65)';
+    return 'var(--pacer)';
+  }
+
+  for (let w = 0; w < weeks; w++) {
+    const col = document.createElement('div');
+    col.className = 'contrib-col';
+    for (let d = 0; d < 7; d++) {
+      const cell = document.createElement('div');
+      cell.className = 'contrib-cell';
+      const val = seed[w * 7 + d] || 0;
+      cell.style.background = cellColor(val);
+      col.appendChild(cell);
+    }
+    grid.appendChild(col);
+  }
+}
+
+buildDemoGrid();
+
+// ── SIGNUP ──
+function handleSignup() {
+  const input = document.getElementById('email-input');
+  const msg = document.getElementById('success-msg');
+  const email = input ? input.value.trim() : '';
+  if (!email || !email.includes('@')) {
+    input.style.borderColor = 'var(--stop)';
+    setTimeout(() => { input.style.borderColor = ''; }, 1200);
+    return;
+  }
+  // In production: send to your backend / mailing list
+  console.log('signup:', email);
+  if (input) { input.style.display = 'none'; }
+  document.querySelector('.btn-signup').style.display = 'none';
+  if (msg) msg.classList.add('visible');
+}
+
+// Enter key on email
+document.getElementById('email-input')?.addEventListener('keydown', e => {
+  if (e.key === 'Enter') handleSignup();
+});
+</script>
+</body>
+</html>

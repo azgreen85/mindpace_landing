@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>About the Founder — MindPace</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:       #0d0f14;
+  --bg2:      #141720;
+  --bg3:      #1c2030;
+  --bg4:      #232840;
+  --border:   rgba(255,255,255,0.07);
+  --border2:  rgba(255,255,255,0.13);
+  --text:     #e8eaf0;
+  --text2:    #8890a8;
+  --text3:    #505570;
+  --accent:   #7c9fff;
+  --accent2:  #4a7aff;
+  --pacer:    #64d9a8;
+  --amber:    #ffc664;
+  --stop:     #ff7c7c;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.1rem 2rem;
+  background: rgba(13,15,20,0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+}
+.nav-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.35rem;
+  color: var(--text);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.nav-right { display: flex; align-items: center; gap: 1.5rem; }
+.nav-link {
+  font-size: 0.875rem;
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.nav-link:hover { color: var(--text); }
+.nav-cta {
+  padding: 0.5rem 1.25rem;
+  background: var(--pacer);
+  border: none; border-radius: 7px;
+  color: #0a1f18;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+.nav-cta:hover { opacity: 0.85; }
+
+/* ── HERO ── */
+.hero {
+  padding: 9rem 2rem 5rem;
+  max-width: 760px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 300px;
+  background: radial-gradient(ellipse at top, rgba(100,217,168,0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.72rem;
+  color: var(--pacer);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+  padding: 0.3rem 0.75rem;
+  background: rgba(100,217,168,0.1);
+  border: 1px solid rgba(100,217,168,0.2);
+  border-radius: 20px;
+}
+
+.hero-headline {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.hero-headline em {
+  font-style: italic;
+  color: var(--pacer);
+}
+
+.hero-sub {
+  font-size: 1.05rem;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 580px;
+}
+
+/* ── STORY ── */
+.story {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem;
+}
+
+/* Opening quote — the signature element */
+.opening-quote {
+  margin: 3.5rem 0;
+  padding: 2.25rem 2.5rem;
+  border-left: 2px solid var(--pacer);
+  background: var(--bg2);
+  border-radius: 0 12px 12px 0;
+  position: relative;
+}
+
+.opening-quote::before {
+  content: '"';
+  position: absolute;
+  top: -0.5rem; left: 1.5rem;
+  font-family: 'DM Serif Display', serif;
+  font-size: 4rem;
+  color: var(--pacer);
+  opacity: 0.3;
+  line-height: 1;
+}
+
+.opening-quote p {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+  line-height: 1.5;
+  color: var(--text);
+  font-style: italic;
+}
+
+/* Body prose */
+.prose p {
+  font-size: 1rem;
+  color: var(--text2);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.prose p:last-child { margin-bottom: 0; }
+
+.prose strong { color: var(--text); font-weight: 600; }
+
+/* Inline pull quote */
+.pull-quote {
+  margin: 2.5rem 0;
+  padding-left: 1.5rem;
+  border-left: 2px solid rgba(100,217,168,0.3);
+}
+
+.pull-quote p {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.2rem;
+  color: var(--text);
+  font-style: italic;
+  line-height: 1.5;
+  margin-bottom: 0 !important;
+}
+
+/* ── TIMELINE ── */
+.timeline-section {
+  margin: 4rem 0;
+}
+
+.section-label {
+  font-size: 0.72rem;
+  color: var(--pacer);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+  margin-bottom: 2rem;
+}
+
+.timeline {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--pacer), rgba(100,217,168,0.1));
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 2.25rem;
+}
+
+.timeline-item:last-child { margin-bottom: 0; }
+
+.timeline-dot {
+  position: absolute;
+  left: -2.5rem;
+  top: 6px;
+  width: 8px; height: 8px;
+  background: var(--pacer);
+  border-radius: 50%;
+  border: 2px solid var(--bg);
+  box-shadow: 0 0 8px rgba(100,217,168,0.5);
+  transform: translateX(-3.5px);
+}
+
+.timeline-age {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.8rem;
+  color: var(--pacer);
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  letter-spacing: 0.05em;
+}
+
+.timeline-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+  line-height: 1.3;
+}
+
+.timeline-desc {
+  font-size: 0.875rem;
+  color: var(--text3);
+  line-height: 1.55;
+}
+
+/* ── INTERESTS GRID ── */
+.interests-section {
+  margin: 4rem 0;
+}
+
+.interests-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.interest-card {
+  background: var(--bg2);
+  padding: 1.25rem 1.35rem;
+  transition: background 0.2s;
+}
+.interest-card:hover { background: var(--bg3); }
+
+.interest-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.interest-desc {
+  font-size: 0.8rem;
+  color: var(--text3);
+  line-height: 1.5;
+}
+
+/* ── BACKGROUND TAGS ── */
+.background-section {
+  margin: 3rem 0 0;
+}
+
+.bg-tags {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+}
+
+.bg-tag {
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background: var(--bg3);
+  color: var(--text2);
+  border: 1px solid var(--border2);
+}
+
+/* ── CLOSING ── */
+.closing {
+  margin: 5rem 0 0;
+  padding: 3rem;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 14px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.closing::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 400px; height: 200px;
+  background: radial-gradient(ellipse, rgba(100,217,168,0.05) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.closing-text {
+  font-family: 'DM Serif Display', serif;
+  font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 0.85rem;
+  font-style: italic;
+}
+
+.closing-sub {
+  font-size: 0.925rem;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-cta {
+  display: inline-block;
+  padding: 0.85rem 2rem;
+  background: var(--pacer);
+  border: none; border-radius: 9px;
+  color: #0a1f18;
+  font-family: 'Outfit', sans-serif;
+  font-size: 0.975rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity 0.2s, transform 0.15s;
+}
+.btn-cta:hover { opacity: 0.88; transform: translateY(-1px); }
+
+/* ── SECTION DIVIDER ── */
+.divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--border2), transparent);
+  margin: 3.5rem 0;
+}
+
+/* ── FOOTER ── */
+footer {
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.footer-brand {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.1rem;
+  color: var(--text2);
+}
+.footer-note { font-size: 0.78rem; color: var(--text3); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .hero { padding-top: 7rem; }
+  .opening-quote { padding: 1.75rem; }
+  footer { flex-direction: column; gap: 0.5rem; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-brand" href="mindpace_landing.html">MindPace</a>
+  <div class="nav-right">
+    <a class="nav-link" href="mindpace_landing.html">Home</a>
+    <a class="nav-cta" href="https://azgreen85.github.io/mindpace/" target="_blank">Get early access</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<div class="hero">
+  <div class="eyebrow">About the founder</div>
+  <h1 class="hero-headline">I didn't build this<br>to sell an app.<br>I built it to <em>stay alive.</em></h1>
+  <p class="hero-sub">A personal story about bipolar disorder, breathwork, and what happens when a psychology graduate starts treating their own nervous system like a data set.</p>
+</div>
+
+<!-- ── STORY ── -->
+<div class="story">
+
+  <div class="opening-quote">
+    <p>I was diagnosed with bipolar disorder at 18. That same year, I sat my first ten-day silent Vipassana retreat — not because I was spiritually inclined, but because I was desperate. I needed something that wasn't a pill.</p>
+  </div>
+
+  <div class="prose">
+    <p>By 24, I was a qualified yoga instructor. Not as a career pivot — as a survival strategy. The practice helped with the anxiety. It helped with the cycling moods. It gave me something concrete to come back to when everything else felt abstract.</p>
+
+    <p>But I also lost two friends to suicide. And those losses changed something. <strong>I stopped being interested in wellness as self-improvement. I became interested in it as a matter of life and death</strong> — for people who couldn't access therapy, who couldn't afford medication, who were just trying to make it through the day.</p>
+
+    <p>For a long time I thought I could think my way out of my illness. My degree is in psychology and biology. I started a project called Health Mental — trying to map out the connections between fascia, gut health, and the nervous system. I got deep into polyvagal theory. I became obsessed with the idea that the body keeps score, and that the body could also be the solution.</p>
+  </div>
+
+  <div class="pull-quote">
+    <p>"I went from someone who was yelling — at others, at myself — to someone who could feel the charge building before it crested."</p>
+  </div>
+
+  <div class="prose">
+    <p>What I kept coming back to was breath. It's the one autonomic function you can consciously control. And when I started tracking my breathwork practice — seeing the data, watching the pattern emerge — something shifted. It wasn't that I became more disciplined. <strong>It was that I stopped needing to be.</strong></p>
+
+    <p>MindPace is built for people who struggle to maintain habits. Including me.</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- TIMELINE -->
+  <div class="timeline-section">
+    <div class="section-label">Timeline</div>
+    <div class="timeline">
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-age">Age 18</div>
+        <div class="timeline-title">Bipolar diagnosis + first Vipassana retreat</div>
+        <div class="timeline-desc">Ten days of silence. A turning point.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-age">Age 24</div>
+        <div class="timeline-title">Qualified as a yoga instructor</div>
+        <div class="timeline-desc">Teaching became a way of deepening a practice that was keeping me well.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--stop); box-shadow: 0 0 8px rgba(255,124,124,0.5);"></div>
+        <div class="timeline-age" style="color: var(--text3);">—</div>
+        <div class="timeline-title">Lost two friends to suicide</div>
+        <div class="timeline-desc">Shifted focus from personal wellness to accessible tools for people in crisis.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--amber); box-shadow: 0 0 8px rgba(255,198,100,0.4);"></div>
+        <div class="timeline-age" style="color: var(--amber);">—</div>
+        <div class="timeline-title">Started Health Mental</div>
+        <div class="timeline-desc">Exploring the links between fascia, gut health, and the nervous system.</div>
+      </div>
+
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background: var(--accent); box-shadow: 0 0 8px rgba(124,159,255,0.5);"></div>
+        <div class="timeline-age" style="color: var(--accent);">Now</div>
+        <div class="timeline-title">Building MindPace</div>
+        <div class="timeline-desc">A breath tracking tool designed for people who struggle to maintain habits — including me.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- INTERESTS -->
+  <div class="interests-section">
+    <div class="section-label">What I'm interested in</div>
+    <div class="interests-grid">
+      <div class="interest-card">
+        <div class="interest-title">Polyvagal theory</div>
+        <div class="interest-desc">How the nervous system regulates safety and threat responses</div>
+      </div>
+      <div class="interest-card">
+        <div class="interest-title">Tracking as therapy</div>
+        <div class="interest-desc">Data as a mirror, not a report card</div>
+      </div>
+      <div class="interest-card">
+        <div class="interest-title">Body-first approaches</div>
+        <div class="interest-desc">Fascia, gut-brain axis, somatic regulation</div>
+      </div>
+      <div class="interest-card">
+        <div class="interest-title">Accessible mental health</div>
+        <div class="interest-desc">Tools that work for people with no access to care</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BACKGROUND -->
+  <div class="background-section">
+    <div class="section-label">Background</div>
+    <div class="bg-tags">
+      <div class="bg-tag">BSc Psychology &amp; Biology</div>
+      <div class="bg-tag">Yoga instructor</div>
+      <div class="bg-tag">Vipassana practitioner</div>
+      <div class="bg-tag">Polyvagal theory</div>
+      <div class="bg-tag">Lived experience — bipolar disorder</div>
+      <div class="bg-tag">Health Mental project</div>
+    </div>
+  </div>
+
+  <!-- CLOSING -->
+  <div class="closing">
+    <div class="closing-text">"If you're struggling, you're not alone."</div>
+    <p class="closing-sub">MindPace is built for people who know they should do something but can't always manage to. There are no streaks here. No judgement. Just a quiet record of the times you showed up.</p>
+    <a class="btn-cta" href="mindpace_landing.html#signup">Try MindPace free</a>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-brand">MindPace</div>
+  <div class="footer-note">Breathwork tracking for your nervous system · 2026</div>
+</footer>
+
+</body>
+</html>
